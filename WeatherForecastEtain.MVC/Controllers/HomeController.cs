@@ -32,7 +32,8 @@ namespace WeatherForecastEtain.MVC.Controllers
             var weatherResults = await weatherForcastService.GetNextFiveDayForecast("Belfast");
             
             logger.LogInformation("Weather page loaded");
-            return await Task.Run(() => View(weatherResults.Forecasts));
+            
+            return View(weatherResults.Forecasts);
         }
 
         [Authorize]
