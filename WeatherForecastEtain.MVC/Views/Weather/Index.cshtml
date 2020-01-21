@@ -1,0 +1,18 @@
+﻿@model IEnumerable<WeatherForecastEtain.Core.Entities.ForecastReading>
+@{
+    ViewData["Title"] = "Belfast Weather";
+}
+<div class="text-center">
+    <h1>@ViewData["Title"]</h1>
+
+    @Html.React("WeatherList", new
+    {
+        initialData = Model,
+        url = Url.Action("GetWeather")
+    })
+</div>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react/16.8.0/umd/react.development.js"></script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/react-dom/16.8.0/umd/react-dom.development.js"></script>
+<script crossorigin="anonymous" src="https://cdnjs.cloudflare.com/ajax/libs/prop-types/15.6.0/prop-types.js"></script>
+<script src="@Url.Content("~/js/Components/WeatherList.jsx")"></script>
+@Html.ReactInitJavaScript()

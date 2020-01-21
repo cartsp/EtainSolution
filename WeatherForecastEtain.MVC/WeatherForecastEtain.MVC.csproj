@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <PreserveCompilationContext>true</PreserveCompilationContext>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <None Update="wwwroot\**\*;Views\**\*;Areas\**\Views">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore" Version="3.1.8" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.linux-x64" Version="3.1.8" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.osx-x64" Version="3.1.8" />
+    <PackageReference Include="JavascriptEngineSwitcher.ChakraCore.native.win-x64" Version="3.1.8" />
+    <PackageReference Include="JavascriptEngineSwitcher.Extensions.MsDependencyInjection" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.BrowserLink" Version="2.2.0" />
+    <PackageReference Include="React.AspNet" Version="5.1.2" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="3.2.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Async" Version="1.4.0" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Weather-Forcast-Etain.Core\WeatherForecastEtain.Core.csproj" />
+    <ProjectReference Include="..\Weather-Forcast-Etain.Infrastructure\WeatherForecastEtain.Infrastructure.csproj" />
+  </ItemGroup>
+
+
+
+</Project>
