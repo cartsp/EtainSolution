@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using WeatherForecastEtain.Core.Entities;
 using WeatherForecastEtain.Core.Interfaces;
 using WeatherForecastEtain.Infrastructure.DTOs.MetaWeatherAPI;
+using WeatherForecastEtain.Infrastructure.Exceptions;
 
 namespace WeatherForecastEtain.Infrastructure.Services
 {
@@ -32,28 +33,35 @@ namespace WeatherForecastEtain.Infrastructure.Services
         public async Task<WeatherForecast> GetNextFiveDayForecast(string location)
         {
             logger.LogInformation($"Beginning contact with MetaWeather API at: {DateTime.Now}");
-           
-            var metaWeatherLocationID = await GetMetaWeatherLocationID(location);
 
-            var response = await httpClient.GetAsync($"location/{metaWeatherLocationID}/");
-            
-            response.EnsureSuccessStatusCode();
+            try
+            {
+                var metaWeatherLocationID = await GetMetaWeatherLocationID(location);
 
-            var metaWeatherForecast = await JsonSerializer.DeserializeAsync<MetaWeatherForecastLocationSearchResponse>(await response.Content.ReadAsStreamAsync());
+                var response = await httpClient.GetAsync($"location/{metaWeatherLocationID}/");
 
-            logger.LogInformation($"Ending contact with MetaWeather API at: {DateTime.Now}");
+                response.EnsureSuccessStatusCode();
 
-            return new WeatherForecast(location,metaWeatherForecast.consolidated_weather
-                                                .OrderBy(weather => weather.applicable_date)
-                                                .Skip(1) //question asked for next 5 days of weather so skipping todays date
-                                                .Take(5)
-                                                .Select(weather =>
-                                                    new ForecastReading(
-                                                        TemperatureInC              : weather.the_temp,
-                                                        Date                        : DateTime.Parse(weather.applicable_date),
-                                                        WeatherState                : weather.weather_state_name,
-                                                        WeatherStateAbbreviation    : weather.weather_state_abbr))
-                                                .ToImmutableList());
+                var metaWeatherForecast = await JsonSerializer.DeserializeAsync<MetaWeatherForecastLocationSearchResponse>(await response.Content.ReadAsStreamAsync());
+
+                logger.LogInformation($"Ending contact with MetaWeather API at: {DateTime.Now}");
+
+                return new WeatherForecast(location, metaWeatherForecast.consolidated_weather
+                                                    .OrderBy(weather => weather.applicable_date)
+                                                    .Skip(1) //question asked for next 5 days of weather so skipping todays date
+                                                    .Take(5)
+                                                    .Select(weather =>
+                                                        new ForecastReading(
+                                                            TemperatureInC: weather.the_temp,
+                                                            Date: DateTime.Parse(weather.applicable_date),
+                                                            WeatherState: weather.weather_state_name,
+                                                            WeatherStateAbbreviation: weather.weather_state_abbr))
+                                                    .ToImmutableList());
+            }
+            catch (Exception ex)
+            {
+                throw new MetaWeatherAPICommsException(location, ex);
+            }
         }
 
         /// <summary>
@@ -63,13 +71,20 @@ namespace WeatherForecastEtain.Infrastructure.Services
         /// <returns>The MetaWeather WOEID based on location used search the API for forecasts</returns>
         private async Task<int> GetMetaWeatherLocationID(string location)
         {
-            var response = await httpClient.GetAsync($"location/search/?query={location}");
+            try
+            {
+                var response = await httpClient.GetAsync($"location/search/?query={location}");
 
-            response.EnsureSuccessStatusCode();
+                response.EnsureSuccessStatusCode();
 
-            var metaWeatherForecast = await JsonSerializer.DeserializeAsync<List<LocationInfo>>(await response.Content.ReadAsStreamAsync());
+                var metaWeatherForecast = await JsonSerializer.DeserializeAsync<List<LocationInfo>>(await response.Content.ReadAsStreamAsync());
 
-            return metaWeatherForecast.FirstOrDefault().woeid;  //using first for demo, could do more here if needed
+                return metaWeatherForecast.FirstOrDefault().woeid;  //using first for demo, could do more here if needed
+            }
+            catch (Exception ex)
+            {
+                throw new MetaWeatherAPICommsException($"location/search/?query={location}", ex);
+            }
         }
     }
 }
