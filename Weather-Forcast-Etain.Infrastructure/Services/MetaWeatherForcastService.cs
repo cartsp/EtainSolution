@@ -8,8 +8,8 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using WeatherForecastEtain.Core.Entities;
 using WeatherForecastEtain.Core.Interfaces;
+using WeatherForecastEtain.Core.Exceptions;
 using WeatherForecastEtain.Infrastructure.DTOs.MetaWeatherAPI;
-using WeatherForecastEtain.Infrastructure.Exceptions;
 
 namespace WeatherForecastEtain.Infrastructure.Services
 {
