@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Threading.Tasks;
 using WeatherForecastEtain.Core.Entities;
 using WeatherForecastEtain.Core.Exceptions;
@@ -23,7 +24,7 @@ namespace WeatherForecastEtain.Infrastructure.Services
             {
                 return await userRepository.GetUserByUsernameAndPasswordAsync(username, password);
             }
-            catch (System.Exception ex)
+            catch (Exception ex)
             {
                 logger.LogError(ex.ToString());
 
