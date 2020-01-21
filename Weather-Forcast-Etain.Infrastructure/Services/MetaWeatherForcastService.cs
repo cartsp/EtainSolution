@@ -19,7 +19,7 @@ namespace WeatherForecastEtain.Infrastructure.Services
         private readonly ILogger<MetaWeatherForcastService> logger;
 
         public MetaWeatherForcastService(HttpClient httpClient, ILogger<MetaWeatherForcastService> logger)
-        {
+        { 
             this.logger = logger;
             this.httpClient = httpClient;
             this.httpClient.BaseAddress = new Uri("https://www.metaweather.com/api/");
@@ -60,7 +60,9 @@ namespace WeatherForecastEtain.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                throw new MetaWeatherAPICommsException(location, ex);
+                logger.LogError(ex.ToString());
+
+                throw new WeatherAPICommsException(location, ex);
             }
         }
 
@@ -83,7 +85,9 @@ namespace WeatherForecastEtain.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                throw new MetaWeatherAPICommsException($"location/search/?query={location}", ex);
+                logger.LogError(ex.ToString());
+
+                throw new WeatherAPICommsException($"location/search/?query={location}", ex);
             }
         }
     }

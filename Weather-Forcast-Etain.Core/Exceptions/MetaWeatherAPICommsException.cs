@@ -2,13 +2,13 @@
 
 namespace WeatherForecastEtain.Core.Exceptions
 {
-    public class MetaWeatherAPICommsException : Exception
+    public class WeatherAPICommsException : Exception
     {
-        public MetaWeatherAPICommsException(string message) : base(message)
+        public WeatherAPICommsException(string message) : base(message)
         {
         }
 
-        public MetaWeatherAPICommsException(string message, Exception innerException) : base(message, innerException)
+        public WeatherAPICommsException(string message, Exception innerException) : base(message, innerException)
         {
         }
     }
